@@ -1,10 +1,9 @@
                             Tetrinet for Linux
                             ------------------
                   by Andrew Church <achurch@achurch.org>
+                      and Petr Baudis <pasky@ucw.cz>
 
-		   branch of Petr Baudis <pasky@ucw.cz>
-
-                               Version 0.10-pb4
+                               Version 0.11
 
 
 For general information on Tetrinet, consult the file tetrinet.txt (the
