@@ -1,4 +1,4 @@
-.TH "TETRINET-SERVER" "6" "2004-11-23"
+.TH "TETRINET-SERVER" "6" "2004-12-06"
 .\" Please adjust this date whenever revising the manpage.
 .SH "NAME"
 tetrinet-server \- server program for tetrinet
@@ -72,11 +72,13 @@ The levels of all player get averaged if this is set to
 
 .TP
 .BI speciallines\  1
-How many lines must be removed at once to get specials.
+How many lines must be removed to get specials.
 
 .TP
 .BI specialcount\  1
-The number of specials that are added each time.
+The number of specials that are added each time
+.BR speciallines '
+lines are removed.
 
 .TP
 .BI specialcapacity\  18
