@@ -453,15 +453,15 @@ static void close_textwin(TextBuffer *buf)
 static int wide_screen = 0;
 
 /* Field display X/Y coordinates. */
-static const int own_coord[2] = {0,0};
+static const int own_coord[2] = {1,0};
 static int other_coord[5][2] =	/* Recomputed based on screen width */
     { {30,0}, {47,0}, {64,0}, {47,24}, {64,24} };
 
 /* Position of the status window. */
-static const int status_coord[2]     = {28,25};
-static const int next_coord[2]       = {40,24};
-static const int alt_status_coord[2] = {28,2};
-static const int alt_next_coord[2]   = {29,8};
+static const int status_coord[2]     = {29,25};
+static const int next_coord[2]       = {41,24};
+static const int alt_status_coord[2] = {29,2};
+static const int alt_next_coord[2]   = {30,8};
 
 /* Position of the attacks/defenses window. */
 static const int attdef_coord[2] = {28,28};
@@ -555,9 +555,14 @@ static void setup_fields(void)
     x = own_coord[0];
     y = own_coord[1];
     sprintf(buf, "%d", my_playernum);
-    mvaddstr(y, x+FIELD_WIDTH*2+2, buf);
+    mvaddstr(y, x-1, buf);
     for (i = 2; i < FIELD_HEIGHT*2 && players[my_playernum-1][i-2]; i++)
-	mvaddch(y+i, x+FIELD_WIDTH*2+2, players[my_playernum-1][i-2]);
+	mvaddch(y+i, x-1, players[my_playernum-1][i-2]);
+    if (teams[my_playernum-1] != '\0') {
+	mvaddstr(y, x+FIELD_WIDTH*2+2, "T");
+	for (i = 2; i < FIELD_HEIGHT*2 && teams[my_playernum-1][i-2]; i++)
+	    mvaddch(y+i, x+FIELD_WIDTH*2+2, teams[my_playernum-1][i-2]);
+    }
     move(y, x);
     vline(MY_VLINE, FIELD_HEIGHT*2);
     move(y, x+FIELD_WIDTH*2+1);
@@ -585,18 +590,28 @@ static void setup_fields(void)
 	addch(MY_LRCORNER);
 	if (j+1 >= my_playernum) {
 	    sprintf(buf, "%d", j+2);
-	    mvaddstr(y, x+FIELD_WIDTH+2, buf);
+	    mvaddstr(y, x-1, buf);
 	    if (players[j+1]) {
 		for (i = 0; i < FIELD_HEIGHT-2 && players[j+1][i]; i++)
-		    mvaddch(y+i+2, x+FIELD_WIDTH+2, players[j+1][i]);
+		    mvaddch(y+i+2, x-1, players[j+1][i]);
+		if (teams[j+1] != '\0') {
+		    mvaddstr(y, x+FIELD_WIDTH+2, "T");
+		    for (i = 0; i < FIELD_HEIGHT-2 && teams[j+1][i]; i++)
+			mvaddch(y+i+2, x+FIELD_WIDTH+2, teams[j+1][i]);
+		}
 	    }
 	    draw_other_field(j+2);
 	} else {
 	    sprintf(buf, "%d", j+1);
-	    mvaddstr(y, x+FIELD_WIDTH+2, buf);
+	    mvaddstr(y, x-1, buf);
 	    if (players[j]) {
 		for (i = 0; i < FIELD_HEIGHT-2 && players[j][i]; i++)
-		    mvaddch(y+i+2, x+FIELD_WIDTH+2, players[j][i]);
+		    mvaddch(y+i+2, x-1, players[j][i]);
+		if (teams[j] != '\0') {
+		    mvaddstr(y, x+FIELD_WIDTH+2, "T");
+		    for (i = 0; i < FIELD_HEIGHT-2 && teams[j][i]; i++)
+			mvaddch(y+i+2, x+FIELD_WIDTH+2, teams[j][i]);
+		}
 	    }
 	    draw_other_field(j+1);
 	}
