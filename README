@@ -44,11 +44,6 @@ to set up a larger display (for example, I use 100x60); Tetrinet will
 detect this and rearrange the display to make the best use of the available
 space.
 
-NOTE: Xwindows graphics display really isn't supported, despite the
-presence of the "xwin.c" file!  Don't be fooled!  (The file is there to
-remind me to implement Xwindows support someday.  Note how well it's
-working.)
-
 
 Compilation
 -----------
