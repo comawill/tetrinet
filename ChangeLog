@@ -1,3 +1,16 @@
+Thu Sep 11 20:26:53 2003  Gerfried Fuchs <alfie@ist.org>:
+
+	* tty.c:
+
+	Add support to display team name in playfield. Required to move
+	player name to the left.  
+
+Tue Sep  9 19:15:04 2003  Gerfried Fuchs <alfie@ist.org>:
+
+	* sockets.c:
+
+	#include <string.c> to silence memcpy and memset warning.  
+
 Sun Sep  7 16:30:02 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* README, version.h:
