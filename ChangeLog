@@ -1,3 +1,9 @@
+Thu Oct  2 16:35:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Changes, README, version.h:
+
+	tetrinet-0.11 
+
 Thu Sep 11 20:26:53 2003  Gerfried Fuchs <alfie@ist.org>:
 
 	* tty.c:
