@@ -571,11 +571,11 @@ int init(int ac, char **av)
 
     /* If there's a DISPLAY variable set in the environment, default to
      * Xwindows I/O, else default to terminal I/O. */
-    if (getenv("DISPLAY"))
+    /* if (getenv("DISPLAY"))
 	io = &xwin_interface;
     else
-	io = &tty_interface;
-io=&tty_interface;  /* because Xwin isn't done yet */
+	io = &tty_interface; */
+    io=&tty_interface;  /* because Xwin isn't done yet */
 
     srand(time(NULL));
     init_shapes();
