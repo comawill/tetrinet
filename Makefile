@@ -2,14 +2,12 @@ CC = cc
 
 CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -Wall
 OBJS = sockets.o tetrinet.o tetris.o tty.o
-### no xwin.o, because it isn't done yet 
-# OBJS = sockets.o tetrinet.o tetris.o tty.o xwin.o
 
 ### If you want to have -server tetrinet client option, comment the two lines
 ### above and uncomment this instead.
 
 # CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -DBUILTIN_SERVER -Wall
-# OBJS = server.o sockets.o tetrinet.o tetris.o tty.o xwin.o
+# OBJS = server.o sockets.o tetrinet.o tetris.o tty.o
 
 ### If you experience random delays and server freezes when accepting new
 ### clients, add -DNO_BRUTE_FORCE_DECRYPTION to the CFLAGS line.
@@ -46,7 +44,5 @@ sockets.o:	sockets.c sockets.h tetrinet.h
 tetrinet.o:	tetrinet.c tetrinet.h io.h server.h sockets.h tetris.h
 tetris.o:	tetris.c tetris.h tetrinet.h io.h sockets.h
 tty.o:		tty.c tetrinet.h tetris.h io.h
-### no xwin.o, because it isn't done yet 
-#xwin.o:		xwin.c tetrinet.h tetris.h io.h
 
 tetrinet.h:	io.h
