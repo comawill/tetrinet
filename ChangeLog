@@ -1,3 +1,10 @@
+Fri Sep  5 14:32:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile, README, tetrinet.c:
+
+	By default the client does not contain the server code anymore. It
+	can still be enabled manually at the compile time. Idea by alfie.  
+
 Fri Sep  5 11:39:39 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* README, version.h:
