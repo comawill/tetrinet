@@ -1,3 +1,9 @@
+Wed Dec 24 08:28:16 2003  Gerfried Fuchs <alfie@ist.org>:
+
+	* tty.c:
+
+	Add some curs_set calls to show/hide the cursor where appropriate.  
+
 Mon Nov 24 16:28:47 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* Makefile:
