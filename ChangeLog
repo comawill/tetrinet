@@ -1,3 +1,15 @@
+Tue Nov 23 12:41:28 2004  Gerfried Fuchs <alfie@ist.org>:
+
+	* TODO:
+
+	Filled the TODO list a little more.  
+
+Tue Nov 23 09:00:48 2004  Gerfried Fuchs <alfie@ist.org>:
+
+	* tetrinet.6:
+
+	Finally, the manpage for the client.  
+
 Wed Dec 24 08:28:16 2003  Gerfried Fuchs <alfie@ist.org>:
 
 	* tty.c:
