@@ -24,6 +24,7 @@ int windows_mode = 0;	/* Try to be just like the Windows version? */
 int noslide = 0;	/* Disallow piece sliding? */
 
 int my_playernum = -1;	/* What player number are we? */
+char *my_nick;		/* And what is our nick? */
 WinInfo winlist[MAXWINLIST];  /* Winners' list from server */
 int server_sock;	/* Socket for server communication */
 int dispmode;		/* Current display mode */
@@ -92,6 +93,8 @@ void parse(char *buf)
 	if (s = strtok(NULL, " "))
 	    my_playernum = atoi(s);
 	/* Note: players[my_playernum-1] is set in init() */
+	/* But that doesn't work when joining other channel. */
+	players[my_playernum-1] = strdup(my_nick);
 
     } else if (strcmp(cmd, "playerjoin") == 0) {
 	int player;
@@ -570,7 +573,7 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 		return 1;
 	    }
 	} else if (!nick) {
-	    nick = av[i];
+	    my_nick = nick = av[i];
 	} else if (!server) {
 	    server = av[i];
 	} else {
