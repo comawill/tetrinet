@@ -556,7 +556,9 @@ int init(int ac, char **av)
     unsigned char ip[4];
     char iphashbuf[32];
     int len;
+#ifdef BUILTIN_SERVER
     int start_server = 0;   /* Start the server? (-server) */
+#endif
     int slide = 0;	    /* Do we definitely want to slide? (-slide) */
 
 
@@ -573,9 +575,12 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 
     for (i = 1; i < ac; i++) {
 	if (*av[i] == '-') {
+#ifdef BUILTIN_SERVER
 	    if (strcmp(av[i], "-server") == 0) {
 		start_server = 1;
-	    } else if (strcmp(av[i], "-fancy") == 0) {
+	    } else
+#endif
+	    if (strcmp(av[i], "-fancy") == 0) {
 		fancy = 1;
 	    } else if (strcmp(av[i], "-log") == 0) {
 		log = 1;
@@ -610,8 +615,10 @@ io=&tty_interface;  /* because Xwin isn't done yet */
     }
     if (slide)
 	noslide = 0;
+#ifdef BUILTIN_SERVER
     if (start_server)
 	exit(server_main());
+#endif
     if (!server) {
 	help();
 	return 1;
