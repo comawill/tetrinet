@@ -90,6 +90,11 @@ You can also give Tetrinet any of the following options:
 	             a program is not currently included in the Tetrinet
 	             distribution.)
 
+        -noshadow    Do not make pieces cast "shadows" when they are slowly
+                     falling.  (Normally the area under piece is filled by
+                     dim dots to help to determine where the piece would hit
+                     the ground if one would press the spacebar.)
+
 	-noslide     Do not allow pieces to "slide" after being dropped
 	             with the spacebar.  (Normally, there is a short time
 	             after pressing the spacebar during which a piece can
@@ -102,9 +107,11 @@ You can also give Tetrinet any of the following options:
 	             -windows without affecting the other changes in
 	             program behavior.
 
+        -shadow      Opposite of -noshadow; makes pieces cast "shadows".
+
 	-windows     Behave as much like the Windows version of Tetrinet as
 	             possible.  (See "Differences from Windows Tetrinet".)
-	             Implies -noslide.
+	             Implies -noslide and -noshadow.
 
 
 Starting the server

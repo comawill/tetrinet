@@ -33,10 +33,10 @@ char specials[MAX_SPECIALS] = {-1}; /* Special block inventory */
 int next_piece;		/* Next piece to fall */
 
 static struct timeval timeout;	/* Time of next action */
-static int current_piece;	/* Current piece number */
-static int current_rotation;	/* Current rotation value */
-static int current_x;		/* Current X position */
-static int current_y;		/* Current Y position */
+int current_piece;	/* Current piece number */
+int current_rotation;	/* Current rotation value */
+int current_x;		/* Current X position */
+int current_y;		/* Current Y position */
 static int piece_waiting;	/* Are we waiting for a new piece to start? */
 
 static int last_special;	/* Last line for which we added a special */
@@ -97,15 +97,8 @@ static const char shapes[7][4][4][4] = {
       { "....", "....", "....", "...." } }
 };
 
-typedef struct {
-    int hot_x, hot_y;	/* Hotspot coordinates */
-    int top, left;	/* Top-left coordinates relative to hotspot */
-    int bottom, right;	/* Bottom-right coordinates relative to hotspot */
-    char shape[4][4];	/* Shape data for the piece */
-} PieceData;
-
 /* piecedata[piece][rot]; filled in by init_shapes() */
-static PieceData piecedata[7][4];
+PieceData piecedata[7][4];
 
 /*************************************************************************/
 

@@ -40,6 +40,20 @@ extern int levels[6];
 extern int lines;
 extern char specials[MAX_SPECIALS];
 extern int next_piece;
+extern int current_x, current_y;
+
+
+typedef struct {
+    int hot_x, hot_y;	/* Hotspot coordinates */
+    int top, left;	/* Top-left coordinates relative to hotspot */
+    int bottom, right;	/* Bottom-right coordinates relative to hotspot */
+    char shape[4][4];	/* Shape data for the piece */
+} PieceData;
+
+PieceData piecedata[7][4];
+
+extern int current_piece, current_rotation;
+
 
 extern void init_shapes(void);
 extern int get_shape(int piece, int rotation, char buf[4][4]);

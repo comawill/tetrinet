@@ -658,14 +658,49 @@ static void draw_own_field(void)
 {
     int x, y, x0, y0;
     Field *f = &fields[my_playernum-1];
+    int shadow[4] = { -1, -1, -1, -1 };
 
     if (dispmode != MODE_FIELDS)
 	return;
+
+    /* XXX: Code duplication with tetris.c:draw_piece(). --pasky */
+    if (playing_game && cast_shadow) {
+	int x = current_x - piecedata[current_piece][current_rotation].hot_x;
+	int y = current_y - piecedata[current_piece][current_rotation].hot_y;
+	char *shape = (char *) piecedata[current_piece][current_rotation].shape;
+	int i, j;
+
+	for (j = 0; j < 4; j++) {
+	    if (y+j < 0) {
+		shape += 4;
+		continue;
+	    }
+	    for (i = 0; i < 4; i++) {
+		if (*shape++)
+		    shadow[i] = y + j;
+	    }
+	}
+    }
+
     x0 = own_coord[0]+1;
     y0 = own_coord[1];
     for (y = 0; y < 22; y++) {
 	for (x = 0; x < 12; x++) {
 	    int c = tile_chars[(*f)[y][x]];
+
+	    if (playing_game && cast_shadow) {
+		PieceData *piece = &piecedata[current_piece][current_rotation];
+		int piece_x = current_x - piece->hot_x;
+
+		if (x >= piece_x && x <= piece_x + 3
+			&& shadow[(x - piece_x)] >= 0
+			&& shadow[(x - piece_x)] < y
+			&& ((c & 0x7f) == ' ')) {
+		    c = (c & (~0x7f)) | '.'
+			| getcolor(COLOR_BLACK, COLOR_BLACK) | A_BOLD;
+		}
+	    }
+
 	    mvaddch(y0+y*2, x0+x*2, c);
 	    addch(c);
 	    mvaddch(y0+y*2+1, x0+x*2, c);
@@ -700,8 +735,9 @@ static void draw_other_field(int player)
     y0 = other_coord[player][1];
     for (y = 0; y < 22; y++) {
 	move(y0+y, x0);
-	for (x = 0; x < 12; x++)
+	for (x = 0; x < 12; x++) {
 	    addch(tile_chars[(*f)[y][x]]);
+	}
     }
     if (gmsg_inputwin) {
 	delwin(gmsg_inputwin);

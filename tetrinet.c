@@ -24,6 +24,7 @@ char *logname;		/* Log filename */
 int windows_mode = 0;	/* Try to be just like the Windows version? */
 int noslide = 0;	/* Disallow piece sliding? */
 int tetrifast = 0;	/* TetriFast mode? */
+int cast_shadow = 1;	/* Make pieces cast shadow? */
 
 int my_playernum = -1;	/* What player number are we? */
 char *my_nick;		/* And what is our nick? */
@@ -536,14 +537,18 @@ void help()
 "  -fancy       Use \"fancy\" TTY graphics.\n"
 "  -fast        Connect to the server in the tetrifast mode.\n"
 "  -log <file>  Log network traffic to the given file.\n"
+"  -noshadow    Do not make the pieces cast shadow.\n"
 "  -noslide     Do not allow pieces to \"slide\" after being dropped\n"
 "               with the spacebar.\n"
 "  -server      Start the server instead of the client.\n"
+"  -shadow      Make the pieces cast shadow. Can speed up gameplay\n"
+"               considerably, but it can be considered as cheating by\n"
+"               some people since some other tetrinet clients lack this.\n"
 "  -slide       Opposite of -noslide; allows pieces to \"slide\" after\n"
 "               being dropped.  If both -slide and -noslide are given,\n"
 "               -slide takes precedence.\n"
 "  -windows     Behave as much like the Windows version of Tetrinet as\n"
-"               possible. Implies -noslide.\n"
+"               possible. Implies -noslide and -noshadow.\n"
 	   );
 }
 
@@ -592,11 +597,16 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 		logname = av[i];
 	    } else if (strcmp(av[i], "-noslide") == 0) {
 		noslide = 1;
+	    } else if (strcmp(av[i], "-noshadow") == 0) {
+		cast_shadow = 0;
+	    } else if (strcmp(av[i], "-shadow") == 0) {
+		cast_shadow = 1;
 	    } else if (strcmp(av[i], "-slide") == 0) {
 		slide = 1;
 	    } else if (strcmp(av[i], "-windows") == 0) {
 		windows_mode = 1;
 		noslide = 1;
+		cast_shadow = 0;
 	    } else if (strcmp(av[i], "-fast") == 0) {
 		tetrifast = 1;
 	    } else {
