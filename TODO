@@ -5,4 +5,11 @@ If in game, server should send current fields to new-connecting players
 "Server lines" not implemented
 If gmsg input window is open and we switch to Partyline mode, things get
 	confused
-Next block and stats are displayed during a game even in Partyline mode
+
+-) Next block and stats are displayed during a game even in Partyline mode
+
+-) When opening <t>alk in playfield and simply pressing enter it doesn't go away
+-) ANSI codes sent by server should be interpreted
+-) really hide the cursor on the playfield completely
+-) automatic switch to playfield on game start, switch to partyline on end
+-) pause / unpause key in playfield
