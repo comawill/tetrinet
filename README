@@ -74,6 +74,13 @@ You can also give Tetrinet any of the following options:
 	-fancy       Use "fancy" TTY graphics.  (Note that this will slow
 	             down redraws somewhat.)
 
+	-fast        Use the "tetrifast" mode to connect to the server.
+	             This mode eliminates the delay before a new cube
+	             appears, thus speeding the game up noticeably. This
+	             mode is incompatible with the classic mode and the
+	             server has to support it. If in doubt, ask the other
+	             players.
+
 	-log <file>  Log network traffic to the given file.  All lines
 	             start with an absolute time (seconds) in brackets.
 	             Lines sent from the client to the server are prefixed

@@ -531,6 +531,7 @@ void help()
 "\n"
 "Options (see README for details):\n"
 "  -fancy       Use \"fancy\" TTY graphics.\n"
+"  -fast        Connect to the server in the tetrifast mode.\n"
 "  -log <file>  Log network traffic to the given file.\n"
 "  -noslide     Do not allow pieces to \"slide\" after being dropped\n"
 "               with the spacebar.\n"
