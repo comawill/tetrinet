@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <string.h>
 #include "sockets.h"
 #include "tetrinet.h"
 
