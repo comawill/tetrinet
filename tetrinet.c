@@ -22,6 +22,7 @@ int log = 0;		/* Log network traffic to file? */
 char *logname;		/* Log filename */
 int windows_mode = 0;	/* Try to be just like the Windows version? */
 int noslide = 0;	/* Disallow piece sliding? */
+int tetrifast = 0;	/* TetriFast mode? */
 
 int my_playernum = -1;	/* What player number are we? */
 char *my_nick;		/* And what is our nick? */
@@ -89,7 +90,7 @@ void parse(char *buf)
 	if (dispmode == MODE_WINLIST)
 	    io->setup_winlist();
 
-    } else if (strcmp(cmd, "playernum") == 0) {
+    } else if (strcmp(cmd, tetrifast ? ")#)(!@(*3" : "playernum") == 0) {
 	if (s = strtok(NULL, " "))
 	    my_playernum = atoi(s);
 	/* Note: players[my_playernum-1] is set in init() */
@@ -199,7 +200,7 @@ void parse(char *buf)
 	snprintf(buf, sizeof(buf), "* %s %s", name, t);
 	io->draw_text(BUFFER_PLINE, buf);
 
-    } else if (strcmp(cmd, "newgame") == 0) {
+    } else if (strcmp(cmd, tetrifast ? "*******" : "newgame") == 0) {
 	int i;
 
 	if (s = strtok(NULL, " "))
@@ -568,6 +569,8 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 	    } else if (strcmp(av[i], "-windows") == 0) {
 		windows_mode = 1;
 		noslide = 1;
+	    } else if (strcmp(av[i], "-fast") == 0) {
+		tetrifast = 1;
 	    } else {
 		fprintf(stderr, "Unknown option %s\n", av[i]);
 		return 1;
@@ -597,7 +600,7 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 		server, strerror(errno));
 	return 1;
     }
-    sprintf(nickmsg, "tetrisstart %s 1.13", nick);
+    sprintf(nickmsg, "tetri%s %s 1.13", tetrifast ? "faster" : "sstart", nick);
     sprintf(iphashbuf, "%d", ip[0]*54 + ip[1]*41 + ip[2]*29 + ip[3]*17);
     /* buf[0] does not need to be initialized for this algorithm */
     len = strlen(nickmsg);

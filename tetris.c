@@ -552,7 +552,7 @@ void step_down(void)
 	send_field(&oldfield);
 	piece_waiting = 1;
 	gettimeofday(&timeout, NULL);
-	timeout.tv_usec += 600000;
+	timeout.tv_usec += tetrifast ? 0 : 600000;
 	timeout.tv_sec += timeout.tv_usec / 1000000;
 	timeout.tv_usec %= 1000000;
     }

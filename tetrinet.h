@@ -78,6 +78,7 @@ extern int log;
 extern char *logname;
 extern int windows_mode;
 extern int noslide;
+extern int tetrifast;
 
 extern int my_playernum;
 extern WinInfo winlist[MAXWINLIST];
