@@ -1,0 +1,33 @@
+Fri Sep  5 10:39:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* tetrinet.c, tetrinet.h, tetris.c:
+
+	Tetrifast support.  
+
+Fri Sep  5 10:38:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, tetrinet.c:
+
+	Introduced multichannel support (it was rather just a trivial fix).  
+
+Fri Sep  5 10:37:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* tetrinet.c:
+
+	Still send unknown commands to the server, patch by Gerfried Fuchs
+	<alfie@ist.org> and me.  
+
+Fri Sep  5 10:30:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	Administrative commit - 0.10-pb0.  
+
+Fri Sep  5 10:28:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Changes, Makefile, README, TODO, io.h, server.c, server.h,
+	sockets.c, sockets.h, tetrinet.c, tetrinet.h, tetrinet.txt,
+	tetris.c, tetris.h, tty.c, xwin.c:
+
+	Initial revision 
+
