@@ -717,8 +717,10 @@ static void draw_own_field(void)
 	gmsg_inputwin = NULL;
 	draw_gmsg_input(NULL, -1);
     }
-    if (!field_redraw)
+    if (!field_redraw) {
+	(void)curs_set(0);
 	screen_refresh();
+    }
 }
 
 /*************************************************************************/
@@ -749,8 +751,10 @@ static void draw_other_field(int player)
 	gmsg_inputwin = NULL;
 	draw_gmsg_input(NULL, -1);
     }
-    if (!field_redraw)
+    if (!field_redraw) {
+	(void)curs_set(0);
 	screen_refresh();
+    }
 }
 
 /*************************************************************************/
@@ -826,8 +830,10 @@ static void draw_specials(void)
 	addch(tile_chars[0]);
 	x++;
     }
-    if (!field_redraw)
+    if (!field_redraw) {
+	(void)curs_set(0);
 	screen_refresh();
+    }
 }
 
 /*************************************************************************/
