@@ -500,17 +500,14 @@ void partyline_enter(void)
 		snprintf(buf, sizeof(buf), "*** %s is Now Alone", players[my_playernum-1]);
 		io->draw_text(BUFFER_PLINE, buf);
 	    }
-	} else if (*partyline_buffer == '/'
-		&& partyline_buffer[1] != 0 && partyline_buffer[1] != ' ') {
-	    char *s = strtok(partyline_buffer+1, " ");
-	    if (!s)
-		s = "(null)";
-	    snprintf(buf, sizeof(buf), "*** Unknown command: %s", s);
-	    io->draw_text(BUFFER_PLINE, buf);
 	} else {
 	    sockprintf(server_sock, "pline %d %s", my_playernum, partyline_buffer);
-	    snprintf(buf, sizeof(buf), "<%s> %s", players[my_playernum-1], partyline_buffer);
-	    io->draw_text(BUFFER_PLINE, buf);
+	    if (*partyline_buffer != '/'
+		|| partyline_buffer[1] == 0 || partyline_buffer[1] == ' ') {
+		/* We do not show server-side commands. */
+		snprintf(buf, sizeof(buf), "<%s> %s", players[my_playernum-1], partyline_buffer);
+		io->draw_text(BUFFER_PLINE, buf);
+	    }
 	}
 	partyline_pos = 0;
 	*partyline_buffer = 0;
