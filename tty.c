@@ -651,6 +651,7 @@ static void setup_fields(void)
 	draw_gmsg_input(NULL, -1);
     }
 
+    (void)curs_set(0);
     screen_refresh();
     field_redraw = 0;
 }
@@ -925,6 +926,7 @@ static void draw_gmsg_input(const char *s, int pos)
 	wmove(gmsg_inputwin, 1, 6 + (pos-start));
 	move(gmsg_inputpos+1, 6 + (pos-start));
     }
+    (void)curs_set(1);
     screen_refresh();
 }
 
@@ -940,6 +942,7 @@ static void clear_gmsg_input(void)
 	leaveok(stdscr, TRUE);
 	touchline(stdscr, gmsg_inputpos, gmsg_inputheight);
 	setup_fields();
+        (void)curs_set(0);
 	screen_refresh();
     }
 }
@@ -977,6 +980,7 @@ static void setup_partyline(void)
 
     move(scrheight-3, 2);
     leaveok(stdscr, FALSE);
+    (void)curs_set(1);
     screen_refresh();
 }
 
@@ -1054,6 +1058,7 @@ static void setup_winlist(void)
     addstr("F10=Quit");
     attrset(A_NORMAL);
 
+    (void)curs_set(0);
     screen_refresh();
 }
 
