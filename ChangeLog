@@ -1,3 +1,17 @@
+Wed Mar  2 23:08:16 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO, tetrinet.c:
+
+	Automagically switch from/to the playfield on game end/start.  
+
+Wed Mar  2 22:55:51 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO, io.h, tetrinet.c, tty.c:
+
+	Support for server text attributes in messages. No more ugly control
+	codes. Mixed with a portability fix, use pstring() instead of
+	strstring() - still nothing shiny, but much better than before.  
+
 Wed Mar  2 21:25:47 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* .vimrc:
