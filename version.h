@@ -7,6 +7,6 @@
 #ifndef TETRINET__VERSION_H
 #define TETRINET__VERSION_H
 
-#define VERSION "0.10-pb2"
+#define VERSION "0.10-pb3"
 
 #endif
