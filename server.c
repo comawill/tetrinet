@@ -927,7 +927,7 @@ static void check_sockets()
 			ip[0]*54 + ip[1]*41 + ip[2]*29 + ip[3]*17);
 		decrypt_message(buf, newbuf, iphashbuf);
 		if(strncmp(newbuf,"tetrisstart ",12) == 0)
-		    cryptok;
+		    goto cryptok;
 
 #ifndef NO_BRUTE_FORCE_DECRYPTION
 		/* The IP-based crypt does not work for clients behind NAT. So
