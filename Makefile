@@ -4,7 +4,7 @@
 CC = cc
 
 # The passed compilation flags
-CFLAGS = -O2 -I/usr/include/ncurses -g -Wall
+CFLAGS = -O2 -I/usr/include/ncurses -g -Wall -fno-builtin-log
 
 # Whether to enable IPv6 support
 IPV6 = 1
