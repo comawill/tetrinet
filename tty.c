@@ -225,7 +225,6 @@ static void screen_setup(void)
 {
     /* Avoid messy keyfield signals while we're setting up */
     signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
 
     initscr();
@@ -244,25 +243,18 @@ static void screen_setup(void)
 
     /* Catch signals so we can exit cleanly. */
     signal(SIGINT, sighandler);
-    signal(SIGQUIT, sighandler);
     signal(SIGTERM, sighandler);
     signal(SIGHUP, sighandler);
-    signal(SIGSEGV, sighandler);
-    signal(SIGABRT, sighandler);
-    signal(SIGIOT, sighandler);
-    signal(SIGTRAP, sighandler);
-    signal(SIGBUS, sighandler);
-    signal(SIGFPE, sighandler);
     signal(SIGUSR1, sighandler);
     signal(SIGUSR2, sighandler);
     signal(SIGALRM, sighandler);
-#ifdef SIGSTKFLT
-    signal(SIGSTKFLT, sighandler);
-#endif
     signal(SIGTSTP, sighandler);
+#ifdef SIGXCPU
     signal(SIGXCPU, sighandler);
+#endif
+#ifdef SIGXFSZ
     signal(SIGXFSZ, sighandler);
-    signal(SIGVTALRM, sighandler);
+#endif
 
     /* Broken pipes don't want to bother us at all. */
     signal(SIGPIPE, SIG_IGN);
