@@ -807,6 +807,25 @@ static int init()
 
 /*************************************************************************/
 
+static void
+decrypt_message(char *buf, char *newbuf, char *iphashbuf)
+{
+    int j, c, l = strlen(iphashbuf);
+
+    c = xtoi(buf);
+    for (j = 2; buf[j] && buf[j+1]; j += 2) {
+	int temp, d;
+
+	temp = d = xtoi(buf+j);
+	d ^= iphashbuf[((j/2)-1) % l];
+	d += 255 - c;
+	d %= 255;
+	newbuf[j/2-1] = d;
+	c = temp;
+    }
+    newbuf[j/2-1] = 0;
+}
+
 static void check_sockets()
 {
     fd_set fds;
@@ -896,7 +915,6 @@ static void check_sockets()
 #else
 		int hashval;
 #endif
-		int j, c, d;
 
 		if (strlen(buf) < 2*13) {  /* "tetrisstart " + initial byte */
 		    close(fd);
@@ -915,17 +933,7 @@ static void check_sockets()
 		for (hashval = 0; hashval < 35956; hashval++) {
 		    sprintf(iphashbuf, "%d", hashval);
 #endif
-		    c = xtoi(buf);
-		    for (j = 2; buf[j] && buf[j+1]; j += 2) {
-			int temp;
-			temp = d = xtoi(buf+j);
-			d ^= iphashbuf[((j/2)-1) % strlen(iphashbuf)];
-			d += 255 - c;
-			d %= 255;
-			newbuf[j/2-1] = d;
-			c = temp;
-		    }
-		    newbuf[j/2-1] = 0;
+		    decrypt_message(buf, newbuf, iphashbuf);
 #ifndef NO_BRUTE_FORCE_DECRYPTION
 		    if(strncmp(newbuf,"tetrisstart ",12) == 0)
 			break;
