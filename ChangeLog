@@ -1,3 +1,57 @@
+Fri Sep  5 11:39:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, version.h:
+
+	0.10-pb3 
+
+Fri Sep  5 11:37:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* tetrinet.c, version.h:
+
+	Include the version information in the usage output.  
+
+Fri Sep  5 11:33:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* .cvsignore:
+
+	Ignore compiled binaries.  
+
+Fri Sep  5 11:25:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* server.c:
+
+	_Untested_ server-side tetrifast support.  
+
+Fri Sep  5 11:15:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, tetrinet.c:
+
+	Documented the -fast option.  
+
+Fri Sep  5 11:09:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* tetrinet.c:
+
+	Print verbose usage help, also when an unknown option is passed.  
+
+Fri Sep  5 10:56:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Changes:
+
+	-pb branch changes are in ChangeLog.  
+
+Fri Sep  5 10:54:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Put together some AUTHORS file.  
+
+Fri Sep  5 10:46:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	0.10-pb2 (pb1 was done outside of CVS yet) 
+
 Fri Sep  5 10:39:20 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* tetrinet.c, tetrinet.h, tetris.c:
