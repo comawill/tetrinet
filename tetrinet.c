@@ -315,6 +315,10 @@ void parse(char *buf)
 	playing_game = 1;
 	game_paused = 0;
 	msg_text(BUFFER_PLINE, "*** The Game Has Started");
+	if (dispmode != MODE_FIELDS) {
+	    dispmode = MODE_FIELDS;
+	    io->setup_fields();
+	}
 
     } else if (strcmp(cmd, "ingame") == 0) {
 	/* Sent when a player connects in the middle of a game */
@@ -358,6 +362,10 @@ void parse(char *buf)
 		if (i != my_playernum)
 		    io->draw_other_field(i);
 	    }
+	}
+	if (dispmode != MODE_PARTYLINE) {
+	    dispmode = MODE_PARTYLINE;
+	    io->setup_partyline();
 	}
 
     } else if (strcmp(cmd, "playerwon") == 0) {
