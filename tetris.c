@@ -801,8 +801,8 @@ static void gmsg_enter(void)
 	    sockprintf(server_sock, "gmsg <%s> %s", players[my_playernum-1], gmsg_buffer);
 	gmsg_pos = 0;
 	*gmsg_buffer = 0;
-	io->clear_gmsg_input();
     }
+    io->clear_gmsg_input();
 }
 
 #undef curpos
