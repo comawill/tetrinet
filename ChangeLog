@@ -1,3 +1,10 @@
+Fri Oct 24 10:48:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* tty.c:
+
+	Removed plenty of useless (and possible confusing and dangerous)
+	signal handlers.  
+
 Sun Oct  5 18:39:24 2003  Gerfried Fuchs <alfie@ist.org>:
 
 	* Makefile, tetrinet.c, xwin.c:
