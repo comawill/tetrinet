@@ -21,6 +21,10 @@ clean:
 
 spotless: clean
 
+binonly:
+	rm -f *.[ch] Makefile
+	rm -rf CVS/
+
 ########
 
 tetrinet: $(OBJS)
