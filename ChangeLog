@@ -1,3 +1,27 @@
+Mon Nov 24 16:28:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile:
+
+	Added -fno-builtin-log to the default CFLAGS.  
+
+Mon Nov 24 16:26:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile:
+
+	Reworked Makefile to contain configuration area.  
+
+Mon Nov 24 16:16:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	Removed notice about xwin. There's no xwin.c ;-).  
+
+Mon Nov 24 16:16:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile:
+
+	Removed legacy xwin.o stuff.  
+
 Mon Nov 24 16:14:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* server.c:
