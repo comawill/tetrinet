@@ -1,18 +1,42 @@
+######## Configuration area
+
+# Your C compiler
 CC = cc
 
-CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -Wall
+# The passed compilation flags
+CFLAGS = -O2 -I/usr/include/ncurses -g -Wall
+
+# Whether to enable IPv6 support
+IPV6 = 1
+
+# Whether to have builtin server in the tetrinet client (available through
+# -server argument) (tetrinet-server will be built always regardless this)
+# BUILTIN_SERVER = 1
+
+# If you experience random delays and server freezes when accepting new
+# clients, enable this.
+# NO_BRUTE_FORCE_DECRYPTION = 1
+
+
+######## End of configuration area
+
+
 OBJS = sockets.o tetrinet.o tetris.o tty.o
 
-### If you want to have -server tetrinet client option, comment the two lines
-### above and uncomment this instead.
+ifdef IPV6
+	CFLAGS += -DHAVE_IPV6
+endif
+ifdef BUILTIN_SERVER
+	CFLAGS += -DBUILTIN_SERVER
+	OBJS += server.o
+endif
+ifdef NO_BRUTE_FORCE_DECRYPTION
+	CFLAGS += -DNO_BRUTE_FORCE_DECRYPTION
+endif
 
-# CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -DBUILTIN_SERVER -Wall
-# OBJS = server.o sockets.o tetrinet.o tetris.o tty.o
-
-### If you experience random delays and server freezes when accepting new
-### clients, add -DNO_BRUTE_FORCE_DECRYPTION to the CFLAGS line.
 
 ########
+
 
 all: tetrinet tetrinet-server
 
@@ -28,7 +52,9 @@ binonly:
 	rm -f *.[cho] Makefile
 	rm -rf CVS/
 
+
 ########
+
 
 tetrinet: $(OBJS)
 	$(CC) -o $@ $(OBJS) -lncurses
