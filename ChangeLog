@@ -1,3 +1,35 @@
+Mon Nov 24 16:14:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* server.c:
+
+	Tiny compilation fix.  
+
+Mon Nov 24 16:12:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* server.c:
+
+	Optimized the brute-force decryption. Now it still first tries the
+	correct hash and if doesn't succed it goes for bruteforce.  
+
+Mon Nov 24 16:08:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* server.c:
+
+	The decrypting of messages based on IP moved to decrypt_message().  
+
+Mon Nov 24 16:04:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile, server.c:
+
+	Brute-force decryption of the tetrisstart message, now it works even
+	for clients behind NATs.  
+
+Mon Nov 24 16:03:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	See Makefile for various obscure compile-time switches.  
+
 Fri Oct 24 10:48:27 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* tty.c:
