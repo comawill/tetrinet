@@ -14,6 +14,7 @@
 #include "server.h"
 #include "sockets.h"
 #include "tetris.h"
+#include "version.h"
 
 /*************************************************************************/
 
@@ -527,6 +528,8 @@ void partyline_enter(void)
 void help()
 {
     fprintf(stderr,
+"Tetrinet " VERSION " - Text-mode tetrinet client\n"
+"\n"
 "Usage: tetrinet [OPTION]... NICK SERVER\n"
 "\n"
 "Options (see README for details):\n"
