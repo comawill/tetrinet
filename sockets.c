@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/time.h>
+#include <unistd.h>
 #include "sockets.h"
 #include "tetrinet.h"
 
@@ -71,7 +72,7 @@ char *sgets(char *buf, int len, int s)
 	    struct timeval tv;
 	    gettimeofday(&tv, NULL);
 	    fprintf(logfile, "[%d.%03d] <<< %s\n",
-			tv.tv_sec, tv.tv_usec/1000, buf);
+			(int) tv.tv_sec, (int) tv.tv_usec/1000, buf);
 	    fflush(logfile);
 	}
     }
@@ -94,7 +95,7 @@ int sputs(const char *str, int s)
 	    struct timeval tv;
 	    gettimeofday(&tv, NULL);
 	    fprintf(logfile, "[%d.%03d] >>> %s\n",
-			tv.tv_sec, tv.tv_usec/1000, str);
+			(int) tv.tv_sec, (int) tv.tv_usec/1000, str);
 	}
     }
     if (*str != 0) {
@@ -134,7 +135,7 @@ int conn(const char *host, int port, char ipbuf[4])
     struct hostent *hp;
     struct sockaddr_in sa;
 #endif
-    int sock;
+    int sock = -1;
 
 #ifdef HAVE_IPV6
     snprintf(service, sizeof(service), "%d", port);

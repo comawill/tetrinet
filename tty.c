@@ -4,6 +4,8 @@
  * Text terminal I/O routines.
  */
 
+#define _GNU_SOURCE /* strsignal() - FIXME!!! --pasky */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -320,7 +322,7 @@ static void draw_text(int bufnum, const char *s)
     char str[1024];	/* hopefully scrwidth < 1024 */
     const char *t;
     int indent = 0;
-    int x, y;
+    int x = 0, y = 0;
     TextBuffer *buf;
 
     switch (bufnum) {
@@ -472,10 +474,6 @@ static const int field_text_coord[2] = {0,47};
  * the setup_fields() routine. */
 static int tile_chars[15] =
     { ' ','#','#','#','#','#','a','c','n','r','s','b','g','q','o' };
-
-static int attdef_size;
-static int attdef_line;
-static char **attdef_text;
 
 /* Are we redrawing the entire display? */
 static int field_redraw = 0;
@@ -665,7 +663,6 @@ static void draw_own_field(void)
 
     /* XXX: Code duplication with tetris.c:draw_piece(). --pasky */
     if (playing_game && cast_shadow) {
-	int x = current_x - piecedata[current_piece][current_rotation].hot_x;
 	int y = current_y - piecedata[current_piece][current_rotation].hot_y;
 	char *shape = (char *) piecedata[current_piece][current_rotation].shape;
 	int i, j;
@@ -686,7 +683,7 @@ static void draw_own_field(void)
     y0 = own_coord[1];
     for (y = 0; y < 22; y++) {
 	for (x = 0; x < 12; x++) {
-	    int c = tile_chars[(*f)[y][x]];
+	    int c = tile_chars[(int) (*f)[y][x]];
 
 	    if (playing_game && cast_shadow) {
 		PieceData *piece = &piecedata[current_piece][current_rotation];
@@ -736,7 +733,7 @@ static void draw_other_field(int player)
     for (y = 0; y < 22; y++) {
 	move(y0+y, x0);
 	for (x = 0; x < 12; x++) {
-	    addch(tile_chars[(*f)[y][x]]);
+	    addch(tile_chars[(int) (*f)[y][x]]);
 	}
     }
     if (gmsg_inputwin) {
@@ -772,13 +769,13 @@ static void draw_status(void)
 	    for (i = 0; i < 4; i++) {
 		if (wide_screen) {
 		    move(y+j*2, x+i*2);
-		    addch(tile_chars[shape[j][i]]);
-		    addch(tile_chars[shape[j][i]]);
+		    addch(tile_chars[(int) shape[j][i]]);
+		    addch(tile_chars[(int) shape[j][i]]);
 		    move(y+j*2+1, x+i*2);
-		    addch(tile_chars[shape[j][i]]);
-		    addch(tile_chars[shape[j][i]]);
+		    addch(tile_chars[(int) shape[j][i]]);
+		    addch(tile_chars[(int) shape[j][i]]);
 		} else
-		    addch(tile_chars[shape[j][i]]);
+		    addch(tile_chars[(int) shape[j][i]]);
 	    }
 	}
     }
@@ -848,7 +845,7 @@ static const char *msgs[][2] = {
 static void draw_attdef(const char *type, int from, int to)
 {
     int i, width;
-    char *s, buf[512];
+    char buf[512];
 
     width = other_coord[4][0] - attdef_coord[0] - 1;
     for (i = 0; msgs[i][0]; i++) {
@@ -946,8 +943,6 @@ static void clear_gmsg_input(void)
 
 static void setup_partyline(void)
 {
-    int i;
-
     close_textwin(&gmsgbuf);
     close_textwin(&attdefbuf);
     clear();

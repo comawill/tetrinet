@@ -1,12 +1,12 @@
 CC = cc
 
-CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g
+CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -Wall
 OBJS = sockets.o tetrinet.o tetris.o tty.o xwin.o
 
 ### If you want to have -server tetrinet client option, comment the two lines
 ### above and uncomment this instead.
 
-# CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -DBUILTIN_SERVER
+# CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -DBUILTIN_SERVER -Wall
 # OBJS = server.o sockets.o tetrinet.o tetris.o tty.o xwin.o
 
 ########

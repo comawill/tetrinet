@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -17,6 +18,7 @@
 #include <signal.h>
 #include <sys/socket.h>
 #include <sys/time.h>
+#include <unistd.h>
 #include "tetrinet.h"
 #include "tetris.h"
 #include "server.h"
@@ -106,38 +108,38 @@ void read_config(void)
 	if (!s) {
 	    continue;
 	} else if (strcmp(s, "linuxmode") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		linuxmode = atoi(s);
 	} else if (strcmp(s, "ipv6_only") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		ipv6_only = atoi(s);
 	} else if (strcmp(s, "averagelevels") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		level_average = atoi(s);
 	} else if (strcmp(s, "classic") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		old_mode = atoi(s);
 	} else if (strcmp(s, "initiallevel") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		initial_level = atoi(s);
 	} else if (strcmp(s, "levelinc") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		level_inc = atoi(s);
 	} else if (strcmp(s, "linesperlevel") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		lines_per_level = atoi(s);
 	} else if (strcmp(s, "pieces") == 0) {
 	    i = 0;
 	    while (i < 7 && (s = strtok(NULL, " ")))
 		piecefreq[i++] = atoi(s);
 	} else if (strcmp(s, "specialcapacity") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		special_capacity = atoi(s);
 	} else if (strcmp(s, "specialcount") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		special_count = atoi(s);
 	} else if (strcmp(s, "speciallines") == 0) {
-	    if (s = strtok(NULL, " "))
+	    if ((s = strtok(NULL, " ")))
 		special_lines = atoi(s);
 	} else if (strcmp(s, "specials") == 0) {
 	    i = 0;
@@ -234,7 +236,6 @@ static void send_to(int player, const char *format, ...)
 {
     va_list args;
     char buf[1024];
-    int i;
 
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args);
@@ -396,7 +397,7 @@ static void sort_winlist()
 
 static void player_loses(int player)
 {
-    int i, j, order, end = 1, winner = -1, second, third;
+    int i, j, order, end = 1, winner = -1, second = -1, third = -1;
 
     if (player < 1 || player > 6 || player_socks[player-1] < 0)
 	return;

@@ -7,7 +7,9 @@
 /*************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <errno.h>
 #include "tetrinet.h"
 #include "io.h"
@@ -93,7 +95,7 @@ void parse(char *buf)
 	    io->setup_winlist();
 
     } else if (strcmp(cmd, tetrifast ? ")#)(!@(*3" : "playernum") == 0) {
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    my_playernum = atoi(s);
 	/* Note: players[my_playernum-1] is set in init() */
 	/* But that doesn't work when joining other channel. */
@@ -205,24 +207,24 @@ void parse(char *buf)
     } else if (strcmp(cmd, tetrifast ? "*******" : "newgame") == 0) {
 	int i;
 
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    /* stack height */;
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    initial_level = atoi(s);
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    lines_per_level = atoi(s);
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    level_inc = atoi(s);
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    special_lines = atoi(s);
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    special_count = atoi(s);
-	if (s = strtok(NULL, " ")) {
+	if ((s = strtok(NULL, " "))) {
 	    special_capacity = atoi(s);
 	    if (special_capacity > MAX_SPECIALS)
 		special_capacity = MAX_SPECIALS;
 	}
-	if (s = strtok(NULL, " ")) {
+	if ((s = strtok(NULL, " "))) {
 	    memset(piecefreq, 0, sizeof(piecefreq));
 	    while (*s) {
 		i = *s - '1';
@@ -231,7 +233,7 @@ void parse(char *buf)
 		s++;
 	    }
 	}
-	if (s = strtok(NULL, " ")) {
+	if ((s = strtok(NULL, " "))) {
 	    memset(specialfreq, 0, sizeof(specialfreq));
 	    while (*s) {
 		i = *s - '1';
@@ -240,9 +242,9 @@ void parse(char *buf)
 		s++;
 	    }
 	}
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    level_average = atoi(s);
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    old_mode = atoi(s);
 	lines = 0;
 	for (i = 0; i < 6; i++)
@@ -274,7 +276,7 @@ void parse(char *buf)
 	not_playing_game = 1;
 
     } else if (strcmp(cmd, "pause") == 0) {
-	if (s = strtok(NULL, " "))
+	if ((s = strtok(NULL, " ")))
 	    game_paused = atoi(s);
 	if (game_paused) {
 	    io->draw_text(BUFFER_PLINE, "*** The Game Has Been Paused");

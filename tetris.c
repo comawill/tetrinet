@@ -248,7 +248,7 @@ static int piece_overlaps(int x, int y, int rot)
  * erase the piece rather than drawing it.
  */
 
-static int draw_piece(int draw)
+static void draw_piece(int draw)
 {
     Field *f = &fields[my_playernum-1];
     char c = draw ? current_piece % 5 + 1 : 0;
@@ -497,9 +497,8 @@ void step_down(void)
 {
     Field *f = &fields[my_playernum-1];
     PieceData *pd = &piecedata[current_piece][current_rotation];
-    int x = current_x - pd->hot_x;
     int y = current_y - pd->hot_y;
-    int i, j, ynew, ok;
+    int ynew;
 
     draw_piece(0);
     ynew = current_y+1;
@@ -686,7 +685,7 @@ void do_special(const char *type, int from, int to)
 	}
 
     } else if (*type == 'r') {
-	int i, tries;
+	int i;
 
 	for (i = 0; i < 10; i++) {
 	    x = rand() % FIELD_WIDTH;
@@ -795,8 +794,6 @@ static void gmsg_move(int how)
 
 static void gmsg_enter(void)
 {
-    char buf[1024];
-
     if (*gmsg_buffer) {
 	if (strncasecmp(gmsg_buffer, "/me ", 4) == 0)
 	    sockprintf(server_sock, "gmsg * %s %s", players[my_playernum-1], gmsg_buffer+4);
@@ -867,7 +864,6 @@ static const char special_chars[] = "acnrsbgqo";
 
 void tetris_input(int c)
 {
-    Field *f = &fields[my_playernum-1];
     PieceData *pd = &piecedata[current_piece][current_rotation];
     int x = current_x - pd->hot_x;
     int y = current_y - pd->hot_y;
@@ -1024,8 +1020,8 @@ void tetris_input(int c)
 	if (specials[0] == -1)
 	    break;
 	sockprintf(server_sock, "sb %d %c %d",
-			c, special_chars[specials[0]], my_playernum);
-	buf[0] = special_chars[specials[0]];
+			c, special_chars[(int) specials[0]], my_playernum);
+	buf[0] = special_chars[(int) specials[0]];
 	buf[1] = 0;
 	do_special(buf, my_playernum, c);
 	if (special_capacity > 1)
