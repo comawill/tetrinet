@@ -1,3 +1,10 @@
+Sun Oct  5 18:39:24 2003  Gerfried Fuchs <alfie@ist.org>:
+
+	* Makefile, tetrinet.c, xwin.c:
+
+	Removed xwin.c for now because it doesn't include anything useful
+	currently.  
+
 Thu Oct  2 16:59:44 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* Makefile:
