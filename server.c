@@ -35,6 +35,7 @@ static int listen_sock6 = -1;
 #endif
 static int player_socks[6] = {-1,-1,-1,-1,-1,-1};
 static unsigned char player_ips[6][4];
+static int player_modes[6];
 
 /* Which players have already lost in the current game? */
 static int player_lost[6];
@@ -483,7 +484,7 @@ static void player_loses(int player)
 static int server_parse(int player, char *buf)
 {
     char *cmd, *s, *t;
-    int i;
+    int i, tetrifast = 0;
 
     cmd = strtok(buf, " ");
 
@@ -491,6 +492,7 @@ static int server_parse(int player, char *buf)
 	return 1;
 
     } else if (strcmp(cmd, "tetrisstart") == 0) {
+newplayer:
 	s = strtok(NULL, " ");
 	t = strtok(NULL, " ");
 	if (!t)
@@ -505,7 +507,8 @@ static int server_parse(int player, char *buf)
 	if (teams[player-1])
 	    free(teams[player-1]);
 	teams[player-1] = NULL;
-	send_to(player, "playernum %d", player);
+	player_modes[player-1] = tetrifast;
+	send_to(player, "%s %d", tetrifast ? ")#)(!@(*3" : "playernum", player);
 	send_to(player, "winlist %s", winlist_str());
 	for (i = 1; i <= 6; i++) {
 	    if (i != player && players[i-1]) {
@@ -518,6 +521,10 @@ static int server_parse(int player, char *buf)
 	    player_lost[player-1] = 1;
 	}
 	send_to_all_but(player, "playerjoin %d %s", player, players[player-1]);
+
+    } else if (strcmp(cmd, "tetrifaster") == 0) {
+	tetrifast = 1;
+	goto newplayer;
 
     } else if (strcmp(cmd, "team") == 0) {
 	s = strtok(NULL, " ");
@@ -598,7 +605,8 @@ static int server_parse(int player, char *buf)
 	    if (player_socks[i-1] < 0)
 		continue;
 	    /* XXX First parameter is stack height */
-	    send_to(i, "newgame %d %d %d %d %d %d %d %s %s %d %d",
+	    send_to(i, "%s %d %d %d %d %d %d %d %s %s %d %d",
+			player_modes[i-1] ? "*******" : "newgame",
 			0, initial_level, lines_per_level, level_inc,
 			special_lines, special_count, special_capacity,
 			piecebuf, specialbuf, level_average, old_mode);
