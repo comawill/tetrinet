@@ -168,8 +168,7 @@ static void sighandler(int sig)
 {
     if (sig != SIGTSTP) {
 	endwin();
-	if (sig != SIGINT)
-	    fprintf(stderr, "%s\n", strsignal(sig));
+	fprintf(stderr, "%s\n", strsignal(sig));
 	exit(1);
     }
     endwin();
