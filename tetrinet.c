@@ -524,6 +524,25 @@ void partyline_enter(void)
 /*************************************************************************/
 /*************************************************************************/
 
+void help()
+{
+    fprintf(stderr,
+"Usage: tetrinet [OPTION]... NICK SERVER\n"
+"\n"
+"Options (see README for details):\n"
+"  -fancy       Use \"fancy\" TTY graphics.\n"
+"  -log <file>  Log network traffic to the given file.\n"
+"  -noslide     Do not allow pieces to \"slide\" after being dropped\n"
+"               with the spacebar.\n"
+"  -server      Start the server instead of the client.\n"
+"  -slide       Opposite of -noslide; allows pieces to \"slide\" after\n"
+"               being dropped.  If both -slide and -noslide are given,\n"
+"               -slide takes precedence.\n"
+"  -windows     Behave as much like the Windows version of Tetrinet as\n"
+"               possible. Implies -noslide.\n"
+	   );
+}
+
 int init(int ac, char **av)
 {
     int i;
@@ -573,6 +592,7 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 		tetrifast = 1;
 	    } else {
 		fprintf(stderr, "Unknown option %s\n", av[i]);
+	        help();
 		return 1;
 	    }
 	} else if (!nick) {
@@ -580,7 +600,7 @@ io=&tty_interface;  /* because Xwin isn't done yet */
 	} else if (!server) {
 	    server = av[i];
 	} else {
-	    fprintf(stderr, "Usage: %s <nick> <server>\n", av[0]);
+	    help();
 	    return 1;
 	}
     }
@@ -589,7 +609,7 @@ io=&tty_interface;  /* because Xwin isn't done yet */
     if (start_server)
 	exit(server_main());
     if (!server) {
-	fprintf(stderr, "Usage: %s <nick> <server>\n", av[0]);
+	help();
 	return 1;
     }
     if (strlen(nick) > 63)  /* put a reasonable limit on nick length */
