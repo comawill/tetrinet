@@ -4,8 +4,7 @@
  * Text terminal I/O routines.
  */
 
-#define _GNU_SOURCE /* strsignal() - FIXME!!! --pasky */
-
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -168,7 +167,7 @@ static void sighandler(int sig)
 {
     if (sig != SIGTSTP) {
 	endwin();
-	fprintf(stderr, "%s\n", strsignal(sig));
+	psignal(sig, "tetrinet");
 	exit(1);
     }
     endwin();
@@ -293,7 +292,7 @@ static void screen_redraw(void)
 
 /* Put a line of text in a text buffer. */
 
-static void outline(TextBuffer *buf, const char *s)
+static void outline(TextBuffer *buf, const unsigned char *s)
 {
     if (buf->line == buf->height) {
 	if (buf->win)
@@ -301,9 +300,46 @@ static void outline(TextBuffer *buf, const char *s)
 	memmove(buf->text, buf->text+1, (buf->height-1) * sizeof(char *));
 	buf->line--;
     }
-    if (buf->win)
-	mvwaddstr(buf->win, buf->line, 0, s);
-    if (s != buf->text[buf->line])   /* check for restoring display */
+    if (buf->win) {
+	int i, x = 0, l = strlen(s);
+
+	for (i = 0; i < l; i++) {
+	    unsigned char c = s[i] - 1;
+
+	    if (c < TATTR_MAX) {
+		static const int cmap[8] = {
+		    COLOR_BLACK, COLOR_RED, COLOR_GREEN, COLOR_YELLOW,
+		    COLOR_BLUE, COLOR_MAGENTA, COLOR_CYAN, COLOR_WHITE,
+		};
+
+		switch (c) {
+		    case TATTR_RESET:
+			wattrset(buf->win, A_NORMAL);
+			break;
+		    case TATTR_BOLD:
+			wattron(buf->win, A_BOLD);
+			break;
+		    case TATTR_ITALIC:
+			wattron(buf->win, A_STANDOUT);
+			break;
+		    case TATTR_UNDERLINE:
+			wattron(buf->win, A_UNDERLINE);
+			break;
+		    default:
+			assert(c < TATTR_CMAX);
+			wattron(buf->win, getcolor(c == 0 ? COLOR_WHITE : cmap[c % 8], COLOR_BLACK)
+			                  | (A_BOLD * (c / 8)));
+			break;
+		}
+
+	    } else {
+		mvwaddch(buf->win, buf->line, x++, c + 1);
+	    }
+	}
+
+	wattrset(buf->win, A_NORMAL);
+    }
+    if (s != (const unsigned char *) buf->text[buf->line])   /* check for restoring display */
 	buf->text[buf->line] = strdup(s);
     buf->line++;
 }

@@ -29,7 +29,8 @@ typedef struct {
     /* Redraw the screen after clearing it. */
     void (*screen_redraw)(void);
 
-    /* Draw text into the given buffer. */
+    /* Draw text into the given buffer (@s can contain enum tattr fields;
+     * these are the ones with < TATTR_MAX). */
     void (*draw_text)(int bufnum, const char *s);
     /* Clear the given text buffer. */
     void (*clear_text)(int bufnum);
@@ -62,5 +63,32 @@ typedef struct {
 } Interface;
 
 extern Interface tty_interface, xwin_interface;
+
+
+/* Text attributes; note that in strings, they are always encoded with +1 to
+ * avoid black terminating the string. */
+
+enum tattr {
+    /* Note that TATTR_CBLACK text should be visible on a black background, too. */
+    TATTR_CBLACK,
+    TATTR_CRED,
+    TATTR_CGREEN,
+    TATTR_CBROWN,
+    TATTR_CBLUE,
+    TATTR_CMAGENTA,
+    TATTR_CCYAN,
+    TATTR_CGREY,
+    TATTR_CXBRIGHT, /* | this with the colors above to get the bright variant. */
+    TATTR_CMAX = 16,
+
+    TATTR_BOLD,
+    TATTR_ITALIC,
+    TATTR_UNDERLINE,
+
+    TATTR_RESET,
+
+    TATTR_MAX
+};
+
 
 #endif	/* IO_H */

@@ -48,6 +48,64 @@ Interface *io;		/* Input/output routines */
 
 /*************************************************************************/
 
+/* Output message to a message buffer, possibly decoding the text attributes
+ * tetrinet code. */
+
+void msg_text(int bufnum, const unsigned char *s)
+{
+    /* Stolen from gtetrinet: (leading space <=> undefined) */
+    static enum tattr map[32] = {
+	 0, /* N/A */
+	 TATTR_CBLACK,
+	TATTR_BOLD,
+	TATTR_CCYAN | TATTR_CXBRIGHT,
+	TATTR_CBLACK,
+	TATTR_CBLUE | TATTR_CXBRIGHT,
+	TATTR_CGREY,
+	 TATTR_CBLACK,
+	TATTR_CMAGENTA,
+	 TATTR_CBLACK,
+	 TATTR_CBLACK,
+	TATTR_CBLACK | TATTR_CXBRIGHT,
+	TATTR_CGREEN,
+	 TATTR_CBLACK,
+	TATTR_CGREEN | TATTR_CXBRIGHT,
+	TATTR_CGREY,
+	TATTR_CRED,
+	TATTR_CBLUE,
+	TATTR_CBROWN,
+	TATTR_CMAGENTA | TATTR_CXBRIGHT,
+	TATTR_CRED | TATTR_CXBRIGHT,
+	TATTR_CGREY,
+	TATTR_ITALIC,
+	TATTR_CCYAN,
+	TATTR_CGREY | TATTR_CXBRIGHT,
+	TATTR_CBROWN | TATTR_CXBRIGHT,
+	 TATTR_CBLACK,
+	 TATTR_CBLACK,
+	 TATTR_CBLACK,
+	 TATTR_CBLACK,
+	 TATTR_CBLACK,
+	TATTR_UNDERLINE,
+    };
+    unsigned char tb[1024], *t;
+
+    for (t = tb; *s && t - tb < 1024; t++, s++) {
+	if (*s == 0xFF) {
+	    *t = TATTR_RESET + 1;
+	} else if (*s < 32) {
+	    *t = map[(int) *s] + 1;
+	} else {
+	    *t = *s;
+	}
+    }
+    if (t - tb >= 1024) t = &tb[1023];
+    *t = 0;
+
+    io->draw_text(bufnum, tb);
+}
+
+
 /* Parse a line from the server.  Destroys the buffer it's given as a side
  * effect.
  */
@@ -118,7 +176,7 @@ void parse(char *buf)
 	    teams[player] = NULL;
 	}
 	snprintf(buf, sizeof(buf), "*** %s is Now Playing", t);
-	io->draw_text(BUFFER_PLINE, buf);
+	msg_text(BUFFER_PLINE, buf);
 	if (dispmode == MODE_FIELDS)
 	    io->setup_fields();
 
@@ -133,7 +191,7 @@ void parse(char *buf)
 	if (player < 0 || player > 5 || !players[player])
 	    return;
 	snprintf(buf, sizeof(buf), "*** %s has Left", players[player]);
-	io->draw_text(BUFFER_PLINE, buf);
+	msg_text(BUFFER_PLINE, buf);
 	free(players[player]);
 	players[player] = NULL;
 	if (dispmode == MODE_FIELDS)
@@ -160,7 +218,7 @@ void parse(char *buf)
 	    snprintf(buf, sizeof(buf), "*** %s is Now on Team %s", players[player], t);
 	else
 	    snprintf(buf, sizeof(buf), "*** %s is Now Alone", players[player]);
-	io->draw_text(BUFFER_PLINE, buf);
+	msg_text(BUFFER_PLINE, buf);
 
     } else if (strcmp(cmd, "pline") == 0) {
 	int playernum;
@@ -181,7 +239,7 @@ void parse(char *buf)
 	    name = players[playernum];
 	}
 	snprintf(buf, sizeof(buf), "<%s> %s", name, t);
-	io->draw_text(BUFFER_PLINE, buf);
+	msg_text(BUFFER_PLINE, buf);
 
     } else if (strcmp(cmd, "plineact") == 0) {
 	int playernum;
@@ -202,7 +260,7 @@ void parse(char *buf)
 	    name = players[playernum];
 	}
 	snprintf(buf, sizeof(buf), "* %s %s", name, t);
-	io->draw_text(BUFFER_PLINE, buf);
+	msg_text(BUFFER_PLINE, buf);
 
     } else if (strcmp(cmd, tetrifast ? "*******" : "newgame") == 0) {
 	int i;
@@ -256,7 +314,7 @@ void parse(char *buf)
 	new_game();
 	playing_game = 1;
 	game_paused = 0;
-	io->draw_text(BUFFER_PLINE, "*** The Game Has Started");
+	msg_text(BUFFER_PLINE, "*** The Game Has Started");
 
     } else if (strcmp(cmd, "ingame") == 0) {
 	/* Sent when a player connects in the middle of a game */
@@ -279,11 +337,11 @@ void parse(char *buf)
 	if ((s = strtok(NULL, " ")))
 	    game_paused = atoi(s);
 	if (game_paused) {
-	    io->draw_text(BUFFER_PLINE, "*** The Game Has Been Paused");
-	    io->draw_text(BUFFER_GMSG, "*** The Game Has Been Paused");
+	    msg_text(BUFFER_PLINE, "*** The Game Has Been Paused");
+	    msg_text(BUFFER_GMSG, "*** The Game Has Been Paused");
 	} else {
-	    io->draw_text(BUFFER_PLINE, "*** The Game Has Been Unpaused");
-	    io->draw_text(BUFFER_GMSG, "*** The Game Has Been Unpaused");
+	    msg_text(BUFFER_PLINE, "*** The Game Has Been Unpaused");
+	    msg_text(BUFFER_GMSG, "*** The Game Has Been Unpaused");
 	}
 
     } else if (strcmp(cmd, "endgame") == 0) {
@@ -292,7 +350,7 @@ void parse(char *buf)
 	memset(fields, 0, sizeof(fields));
 	specials[0] = -1;
 	io->clear_text(BUFFER_ATTDEF);
-	io->draw_text(BUFFER_PLINE, "*** The Game Has Ended");
+	msg_text(BUFFER_PLINE, "*** The Game Has Ended");
 	if (dispmode == MODE_FIELDS) {
 	    int i;
 	    io->draw_own_field();
@@ -386,7 +444,7 @@ void parse(char *buf)
     } else if (strcmp(cmd, "gmsg") == 0) {
 	if (!(s = strtok(NULL, "")))
 	    return;
-	io->draw_text(BUFFER_GMSG, s);
+	msg_text(BUFFER_GMSG, s);
 
     }
 }
@@ -482,7 +540,7 @@ void partyline_enter(void)
 	if (strncasecmp(partyline_buffer, "/me ", 4) == 0) {
 	    sockprintf(server_sock, "plineact %d %s", my_playernum, partyline_buffer+4);
 	    snprintf(buf, sizeof(buf), "* %s %s", players[my_playernum-1], partyline_buffer+4);
-	    io->draw_text(BUFFER_PLINE, buf);
+	    msg_text(BUFFER_PLINE, buf);
 	} else if (strcasecmp(partyline_buffer, "/start") == 0) {
 	    sockprintf(server_sock, "startgame 1 %d", my_playernum);
 	} else if (strcasecmp(partyline_buffer, "/end") == 0) {
@@ -500,13 +558,13 @@ void partyline_enter(void)
 		    free(teams[my_playernum-1]);
 		teams[my_playernum-1] = strdup(partyline_buffer+6);
 		snprintf(buf, sizeof(buf), "*** %s is Now on Team %s", players[my_playernum-1], partyline_buffer+6);
-		io->draw_text(BUFFER_PLINE, buf);
+		msg_text(BUFFER_PLINE, buf);
 	    } else {
 		if (teams[my_playernum-1])
 		    free(teams[my_playernum-1]);
 		teams[my_playernum-1] = NULL;
 		snprintf(buf, sizeof(buf), "*** %s is Now Alone", players[my_playernum-1]);
-		io->draw_text(BUFFER_PLINE, buf);
+		msg_text(BUFFER_PLINE, buf);
 	    }
 	} else {
 	    sockprintf(server_sock, "pline %d %s", my_playernum, partyline_buffer);
@@ -514,7 +572,7 @@ void partyline_enter(void)
 		|| partyline_buffer[1] == 0 || partyline_buffer[1] == ' ') {
 		/* We do not show server-side commands. */
 		snprintf(buf, sizeof(buf), "<%s> %s", players[my_playernum-1], partyline_buffer);
-		io->draw_text(BUFFER_PLINE, buf);
+		msg_text(BUFFER_PLINE, buf);
 	    }
 	}
 	partyline_pos = 0;
@@ -693,7 +751,7 @@ int main(int ac, char **av)
 	    if (sgets(buf, sizeof(buf), server_sock))
 		parse(buf);
 	    else {
-		io->draw_text(BUFFER_PLINE, "*** Disconnected from Server");
+		msg_text(BUFFER_PLINE, "*** Disconnected from Server");
 		break;
 	    }
 	} else if (i == -2) {
