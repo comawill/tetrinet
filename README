@@ -56,6 +56,11 @@ Type "make".  This will generate two programs: "tetrinet" and
 "tetrinet-server".  The former is the main program; the latter is a
 standalone server.
 
+It is recommended to have a brief look at the start of Makefile, it may
+contain some rather obscure but potentially invaluable compilation
+switches. It might not be necessary to change anything there at all, but
+it is good to be aware of the switches' existence.
+
 
 Starting the client
 -------------------
