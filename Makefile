@@ -11,6 +11,9 @@ OBJS = sockets.o tetrinet.o tetris.o tty.o
 # CFLAGS = -O2 -I/usr/include/ncurses -DHAVE_IPV6 -g -DBUILTIN_SERVER -Wall
 # OBJS = server.o sockets.o tetrinet.o tetris.o tty.o xwin.o
 
+### If you experience random delays and server freezes when accepting new
+### clients, add -DNO_BRUTE_FORCE_DECRYPTION to the CFLAGS line.
+
 ########
 
 all: tetrinet tetrinet-server

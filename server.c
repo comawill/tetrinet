@@ -886,37 +886,60 @@ static void check_sockets()
 	    continue;
 	sgets(buf, sizeof(buf), fd);
 	if (player_socks[i] < 0) {
-	    /* Messy decoding stuff */
-	    char iphashbuf[16], newbuf[1024];
-	    unsigned char *ip;
-	    int j, c, d;
+	    /* Our extension: the client can give up on the meaningless
+	     * encryption completely. */
+	    if (strncmp(buf,"tetrisstart ",12) != 0) {
+		/* Messy decoding stuff */
+		char iphashbuf[16], newbuf[1024];
+#ifdef NO_BRUTE_FORCE_DECRYPTION
+		unsigned char *ip;
+#else
+		int hashval;
+#endif
+		int j, c, d;
 
-	    if (strlen(buf) < 2*13) {	/* "tetrisstart " + initial byte */
-		close(fd);
-		player_socks[i] = -1;
-		continue;
-	    }
-	    ip = player_ips[i];
-	    sprintf(iphashbuf, "%d", ip[0]*54 + ip[1]*41 + ip[2]*29 + ip[3]*17);
-	    c = xtoi(buf);
-	    for (j = 2; buf[j] && buf[j+1]; j += 2) {
-		int temp;
-		temp = d = xtoi(buf+j);
-		d ^= iphashbuf[((j/2)-1) % strlen(iphashbuf)];
-		d += 255 - c;
-		d %= 255;
-		newbuf[j/2-1] = d;
-		c = temp;
-	    }
-	    newbuf[j/2-1] = 0;
-	    if (strncmp(newbuf, "tetrisstart ", 12) != 0) {
-		close(fd);
-		player_socks[i] = -1;
-		continue;
-	    }
-	    /* Buffers should be the same size, but let's be paranoid */
-	    strncpy(buf, newbuf, sizeof(buf));
-	    buf[sizeof(buf)-1] = 0;
+		if (strlen(buf) < 2*13) {  /* "tetrisstart " + initial byte */
+		    close(fd);
+		    player_socks[i] = -1;
+		    continue;
+		}
+#ifdef NO_BRUTE_FORCE_DECRYPTION
+		ip = player_ips[i];
+		sprintf(iphashbuf, "%d",
+			ip[0]*54 + ip[1]*41 + ip[2]*29 + ip[3]*17);
+#else
+		/* The IP-based crypt does not work for clients behind NAT. So
+		 * help them by brute-forcing the crypt. This should not be
+		 * even noticeable unless you are running this under ucLinux on
+		 * some XT machine. */
+		for (hashval = 0; hashval < 35956; hashval++) {
+		    sprintf(iphashbuf, "%d", hashval);
+#endif
+		    c = xtoi(buf);
+		    for (j = 2; buf[j] && buf[j+1]; j += 2) {
+			int temp;
+			temp = d = xtoi(buf+j);
+			d ^= iphashbuf[((j/2)-1) % strlen(iphashbuf)];
+			d += 255 - c;
+			d %= 255;
+			newbuf[j/2-1] = d;
+			c = temp;
+		    }
+		    newbuf[j/2-1] = 0;
+#ifndef NO_BRUTE_FORCE_DECRYPTION
+		    if(strncmp(newbuf,"tetrisstart ",12) == 0)
+			break;
+		} /* for (hashval) */
+#endif
+		if (strncmp(newbuf, "tetrisstart ", 12) != 0) {
+		    close(fd);
+		    player_socks[i] = -1;
+		    continue;
+		}
+		/* Buffers should be the same size, but let's be paranoid */
+		strncpy(buf, newbuf, sizeof(buf));
+		buf[sizeof(buf)-1] = 0;
+	    } /* if encrypted */
 	    player_socks[i] = fd;  /* Has now registered */
 	} /* if client not registered */
 	if (!server_parse(i+1, buf)) {
