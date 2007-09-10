@@ -29,7 +29,7 @@ int special_capacity;	/* Capacity of special block inventory */
 Field fields[6];	/* Current field states */
 int levels[6];		/* Current levels */
 int lines;		/* Lines completed (by us) */
-char specials[MAX_SPECIALS] = {-1}; /* Special block inventory */
+signed char specials[MAX_SPECIALS] = {-1}; /* Special block inventory */
 int next_piece;		/* Next piece to fall */
 
 static struct timeval timeout;	/* Time of next action */

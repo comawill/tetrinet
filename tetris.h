@@ -38,7 +38,7 @@ extern int special_lines, special_count, special_capacity;
 extern Field fields[6];
 extern int levels[6];
 extern int lines;
-extern char specials[MAX_SPECIALS];
+extern signed char specials[MAX_SPECIALS];
 extern int next_piece;
 extern int current_x, current_y;
 
