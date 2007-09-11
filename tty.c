@@ -236,6 +236,15 @@ static void screen_setup(void)
     getmaxyx(stdscr, scrheight, scrwidth);
     scrwidth--;  /* Don't draw in last column--this can cause scroll */
 
+    /* don't start with fewer lines */
+    if (scrheight < 50)
+    {
+	nocbreak();
+	endwin();
+	fprintf(stderr, "You need at least 50 lines to play tetrinet.\n");
+	exit(1);
+    }
+
     /* Cancel all this when we exit. */
     atexit(screen_cleanup);
 
