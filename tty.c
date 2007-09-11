@@ -301,7 +301,7 @@ static void screen_redraw(void)
 
 /* Put a line of text in a text buffer. */
 
-static void outline(TextBuffer *buf, const unsigned char *s)
+static void outline(TextBuffer *buf, const char *s)
 {
     if (buf->line == buf->height) {
 	if (buf->win)

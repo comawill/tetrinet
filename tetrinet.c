@@ -51,7 +51,7 @@ Interface *io;		/* Input/output routines */
 /* Output message to a message buffer, possibly decoding the text attributes
  * tetrinet code. */
 
-void msg_text(int bufnum, const unsigned char *s)
+void msg_text(int bufnum, const char *s)
 {
     /* Stolen from gtetrinet: (leading space <=> undefined) */
     static enum tattr map[32] = {
@@ -88,7 +88,7 @@ void msg_text(int bufnum, const unsigned char *s)
 	 TATTR_CBLACK,
 	TATTR_UNDERLINE,
     };
-    unsigned char tb[1024], *t;
+    char tb[1024], *t;
 
     for (t = tb; *s && t - tb < 1024; t++, s++) {
 	if (*s == 0xFF) {
@@ -626,7 +626,7 @@ int init(int ac, char **av)
     char *nick = NULL, *server = NULL;
     char buf[1024];
     char nickmsg[1024];
-    unsigned char ip[4];
+    char ip[4];
     char iphashbuf[32];
     int len;
 #ifdef BUILTIN_SERVER
