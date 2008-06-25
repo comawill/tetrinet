@@ -188,7 +188,7 @@ int conn(const char *host, int port, char ipbuf[4])
 	return -1;
     }
     if (ipbuf)
-	memcpy(retbuf, &sa.sin_addr, 4);
+	memcpy(ipbuf, &sa.sin_addr, 4);
 #endif
 
     return sock;
