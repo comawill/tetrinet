@@ -591,7 +591,7 @@ static void setup_fields(void)
     x = own_coord[0];
     y = own_coord[1];
     sprintf(buf, "%d", my_playernum);
-    mvaddstr(y, x-1, buf);
+    mvaddnstr(y, x-1, buf, sizeof(buf));
     for (i = 2; i < FIELD_HEIGHT*2 && players[my_playernum-1][i-2]; i++)
 	mvaddch(y+i, x-1, players[my_playernum-1][i-2]);
     if (teams[my_playernum-1] != '\0') {
@@ -626,7 +626,7 @@ static void setup_fields(void)
 	addch(MY_LRCORNER);
 	if (j+1 >= my_playernum) {
 	    sprintf(buf, "%d", j+2);
-	    mvaddstr(y, x-1, buf);
+	    mvaddnstr(y, x-1, buf, sizeof(buf));
 	    if (players[j+1]) {
 		for (i = 0; i < FIELD_HEIGHT-2 && players[j+1][i]; i++)
 		    mvaddch(y+i+2, x-1, players[j+1][i]);
@@ -639,7 +639,7 @@ static void setup_fields(void)
 	    draw_other_field(j+2);
 	} else {
 	    sprintf(buf, "%d", j+1);
-	    mvaddstr(y, x-1, buf);
+	    mvaddnstr(y, x-1, buf, sizeof(buf));
 	    if (players[j]) {
 		for (i = 0; i < FIELD_HEIGHT-2 && players[j][i]; i++)
 		    mvaddch(y+i+2, x-1, players[j][i]);
@@ -813,9 +813,9 @@ static void draw_status(void)
     x = wide_screen ? alt_status_coord[0] : status_coord[0];
     y = wide_screen ? alt_status_coord[1] : status_coord[1];
     sprintf(buf, "%d", lines>99999 ? 99999 : lines);
-    mvaddstr(y, x+7, buf);
+    mvaddnstr(y, x+7, buf, sizeof(buf));
     sprintf(buf, "%d", levels[my_playernum]);
-    mvaddstr(y+1, x+7, buf);
+    mvaddnstr(y+1, x+7, buf, sizeof(buf));
     x = wide_screen ? alt_next_coord[0] : next_coord[0];
     y = wide_screen ? alt_next_coord[1] : next_coord[1];
     if (get_shape(next_piece, 0, shape) == 0) {
@@ -862,7 +862,7 @@ static void draw_specials(void)
 	return;
     x = own_coord[0];
     y = own_coord[1]+45;
-    mvaddstr(y, x, descs[specials[0]+1]);
+    mvaddnstr(y, x, descs[specials[0]+1], sizeof(descs[specials[0]+1]));
     move(y+1, x+10);
     i = 0;
     while (i < special_capacity && specials[i] >= 0 && x < attdef_coord[0]-1) {
@@ -1043,7 +1043,7 @@ static void draw_partyline_input(const char *s, int pos)
     attrset(getcolor(COLOR_WHITE,COLOR_BLACK));
     if (strlen(s) < scrwidth-3) {
 	start = 0;
-	mvaddstr(scrheight-3, 2, s);
+	mvaddnstr(scrheight-3, 2, s, sizeof(2));
 	move(scrheight-3, 2+strlen(s));
 	clrtoeol();
 	move(scrheight-3, 2+pos);
@@ -1086,7 +1086,7 @@ static void setup_winlist(void)
 		x = 4;
 	    mvaddstr(i*2, x-4, "<T>");
 	}
-	mvaddstr(i*2, x, winlist[i].name);
+	mvaddnstr(i*2, x, winlist[i].name, sizeof(winlist[i].name));
 	snprintf(buf, sizeof(buf), "%4d", winlist[i].points);
 	if (winlist[i].games) {
 	    int avg100 = winlist[i].points*100 / winlist[i].games;
@@ -1096,7 +1096,7 @@ static void setup_winlist(void)
 	x += strlen(winlist[i].name) + 2;
 	if (x > scrwidth - strlen(buf))
 	    x = scrwidth - strlen(buf);
-	mvaddstr(i*2, x, buf);
+	mvaddnstr(i*2, x, buf, sizeof(buf));
     }
 
     move(scrheight-2, 0);
