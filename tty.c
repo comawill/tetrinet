@@ -348,7 +348,7 @@ static void outline(TextBuffer *buf, const char *s)
 
 	wattrset(buf->win, A_NORMAL);
     }
-    if (s != (const unsigned char *) buf->text[buf->line])   /* check for restoring display */
+    if (s != (const char *) buf->text[buf->line])   /* check for restoring display */
 	buf->text[buf->line] = strdup(s);
     buf->line++;
 }
